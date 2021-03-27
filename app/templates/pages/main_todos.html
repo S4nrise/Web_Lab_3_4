@@ -1,0 +1,49 @@
+{% extends "layouts/base_layout.html" %}
+
+{% block main %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-1"></div>
+        <form action="/todos" method="POST" class="card mb-3 col-4" id="ajax-form">
+            <header class="card-header">Add todo</header>
+
+            <div class="card-body">
+                <div class="form-group">
+                    <label for="title-input-ajax">Title:</label>
+                    <input type="text" name="title" class="form-control" id="title-input-ajax" required>
+                    <label for="title-description">Description:</label>
+                    <textarea name="description" class="form-control" id="title-description"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Добавить</button>
+            </div>
+        </form>
+        <div class="col-5"></div>
+    </div>
+    <div class="row">
+        <div class="col-1"></div>
+        <div class="card col-10">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-10">Todos</div>
+                    <div class="col-2">
+                        <label for="active-todos">Active todos</label>
+                        <input type="checkbox" aria-label="Активные" id="active-todos" onchange="filter_todo(this)">
+                    </div>
+                </div>
+            </div>
+            <ul class="list-group list-group-flush" id="todos">
+                {% for todo in todos %}
+                    <li class="list-group-item {% if todo.is_done %}ended{% endif %}" data-todo-id="{{ todo.todo_id }}">
+                    <div class="todo-item">
+                        <label for="{{ todo.todo_id }}">{{ todo.name }}{% if todo.is_done %}<span style='color: red;'>(ended)</span>{% endif %}</label>
+                        <div class="todo-description" id="{{ todo.todo_id }}">{{ todo.description }}</div>
+                        <button type="button" class="btn btn-outline-success btn-sm" onclick="change_status_todo({{ todo.todo_id }})">✎</button>
+                        <button type="button" class="btn btn-outline-danger btn-sm" onclick="delete_todo({{ todo.todo_id }})">❌</button>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}
